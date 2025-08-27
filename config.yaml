@@ -1,0 +1,90 @@
+# Predixy Redis Cluster Proxy 配置文件
+
+# 服务器配置
+server:
+  port: 6379                    # 监听端口
+  bind: "0.0.0.0"               # 绑定地址
+  max_clients: 10000            # 最大客户端连接数
+  worker_threads: 4             # 工作线程数
+  read_timeout: 60s             # 读取超时
+  write_timeout: 60s            # 写入超时
+  idle_timeout: 300s            # 空闲超时
+  buffer_size: 4096             # 缓冲区大小
+  tcp_keepalive: 60s            # TCP Keep-Alive间隔
+  tcp_nodelay: true             # 禁用Nagle算法
+
+# Redis集群配置
+cluster:
+  entry_points:                 # 集群入口节点
+    - "172.16.32.27:6379"
+    - "172.16.32.26:6379"
+    - "172.16.32.13:6379"
+    - "172.16.32.14:6379"
+    - "172.16.32.12:6379"
+    - "172.16.32.18:6379"
+    - "172.16.32.15:6379"
+    - "172.16.32.24:6379"
+    - "172.16.32.17:6379"
+    - "172.16.32.19:6379"
+    - "172.16.32.25:6379"
+    - "172.16.32.11:6379"
+    - "172.16.32.23:6379"
+    - "172.16.32.16:6379"
+    - "172.16.32.21:6379"
+    - "172.16.32.22:6379"
+    - "172.16.32.20:6379"
+    - "172.16.32.10:6379"
+  password: ""                  # Redis密码
+  username: ""                  # Redis用户名
+  connect_timeout: 5s           # 连接超时
+  read_timeout: 60s             # 读取超时
+  write_timeout: 60s            # 写入超时
+  health_check_interval: 10s    # 健康检查间隔
+  refresh_interval: 60s         # 拓扑刷新间隔
+  max_retries: 3                # 最大重试次数
+  retry_delay: 100ms            # 重试延迟
+  enable_cross_slot: false      # 启用跨槽操作
+  readonly_replicas: true       # 只读副本支持
+
+# 连接池配置
+pool:
+  size: 100                     # 连接池大小
+  min_idle: 5                   # 最小空闲连接数
+  max_idle: 20                  # 最大空闲连接数
+  max_active: 100               # 最大活跃连接数
+  idle_timeout: 300s            # 空闲连接超时
+  wait: true                    # 连接池满时是否等待
+  wait_timeout: 5s              # 等待超时时间
+  test_on_borrow: true          # 借用时测试连接
+  test_on_return: false         # 归还时测试连接
+  test_while_idle: true         # 空闲时测试连接
+  time_between_eviction: 30s    # 连接回收检查间隔
+
+# 日志配置
+log:
+  level: "debug"                 # 日志级别: debug, info, warn, error
+  format: "json"                # 日志格式: json, console
+  output: "file"              # 输出目标: stdout, stderr, file
+  filename: "predixy.log"       # 日志文件名
+  max_size: 100                 # 单个日志文件最大大小(MB)
+  max_age: 7                    # 日志文件保留天数
+  max_backups: 10               # 最大备份文件数
+  compress: true                # 是否压缩备份文件
+
+# 监控指标配置
+metrics:
+  enabled: true                 # 启用指标收集
+  port: 8080                    # 指标服务端口
+  path: "/metrics"              # 指标路径
+  namespace: "predixy"          # 指标命名空间
+  subsystem: "proxy"            # 指标子系统
+
+# 安全配置
+security:
+  require_auth: false           # 是否需要认证
+  password: ""                  # 代理密码
+  username: ""                  # 代理用户名
+  tls_enabled: false            # 启用TLS
+  tls_cert_file: ""             # TLS证书文件
+  tls_key_file: ""              # TLS私钥文件
+  tls_ca_file: ""               # TLS CA文件
